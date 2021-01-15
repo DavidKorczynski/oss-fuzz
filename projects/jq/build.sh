@@ -22,6 +22,8 @@ autoreconf -fi
 ./configure --with-oniguruma=builtin
 make
 
-$CC $CFLAGS $LIB_FUZZING_ENGINE jq_fuzz_parse.c \
-    ./.libs/libjq.a ./modules/oniguruma/src/.libs/libonig.a -I./src \
-    -o $OUT/jq_fuzz_parse
+$CC $CFLAGS -c jq_fuzz_parse.c \
+    -I./src -o ./jq_fuzz_parse.o
+$CXX $CXXFLAGS $LIB_FUZZING_ENGINE ./jq_fuzz_parse.o \
+    ./.libs/libjq.a ./modules/oniguruma/src/.libs/libonig.a \
+    -o $OUT/jq_fuzz_parse -I./src
